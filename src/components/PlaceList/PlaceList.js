@@ -1,23 +1,23 @@
 import React from 'react';
-import { Button, View, StyleSheet } from 'react-native';
+import { Button, FlatList, StyleSheet } from 'react-native';
 
 import ListItem from '../ListItem/ListItem';
 
 const placeList = props => {
 
-    const placesOutput = props.places.map((place, i) => (
-        <ListItem
-            key={i}
-            placeName={place}
-            onItemPressed={() => props.onItemDeleted(i)}
-        />
-    ));
-
     // Return multiple 'ListItem' components within a View component
     return (
-        <View style={styles.listContainer}>
-            {placesOutput}
-        </View>
+        <FlatList
+            style={styles.listContainer}
+            // Must be an array of objects, not a simple array
+            data={props.places}
+            renderItem={(info) => (
+                <ListItem
+                    placeName={info.item.value}
+                    onItemPressed={() => props.onItemDeleted(info.item.key)}
+                />
+            )}
+        />
     );
 };
 
