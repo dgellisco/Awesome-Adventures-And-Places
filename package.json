@@ -9,6 +9,8 @@
   "dependencies": {
     "react": "16.8.3",
     "react-native": "0.59.8",
+    "react-native-navigation": "^1.1.493",
+    "react-native-vector-icons": "^6.4.2",
     "react-redux": "^7.0.3",
     "redux": "^4.0.1"
   },
@@ -18,7 +20,8 @@
     "babel-jest": "^24.8.0",
     "jest": "^24.8.0",
     "metro-react-native-babel-preset": "^0.54.1",
-    "react-test-renderer": "16.8.3"
+    "react-test-renderer": "16.8.3",
+    "redux-devtools-extension": "^2.13.8"
   },
   "jest": {
     "preset": "react-native"

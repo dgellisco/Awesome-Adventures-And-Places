@@ -1,6 +1,8 @@
 // Needed to use and modify JSX
 import React from 'react';
-import { Button, Image, Modal, StyleSheet, Text, View } from 'react-native';
+import { Button, Image, Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+
+import Icon from 'react-native-vector-icons/Ionicons'
 
 const placeDetail = props => {
 
@@ -16,11 +18,18 @@ const placeDetail = props => {
     };
 
     return (
-        <Modal onRequestClose={props.onModalClose} visible={props.selectedPlace !== null} animationType='slide' >
+        <Modal onRequestClose={props.onModalClosed} visible={props.selectedPlace !== null} animationType='slide' >
             <View style={styles.modalContainer}>
                 {modalContent}
                 <View>
-                    <Button title="Delete" color='red' onPress={props.onItemDelete}/>
+                    <TouchableOpacity onPress={props.onItemDelete}>
+                        <View style={styles.deleteButton}>
+                            <Icon size={30} name="md-trash" style={styles.iconTrash}/>
+                            <Text style={{color: 'white', fontSize: 14, fontWeight: 'bold'}} onPress={props.onItemDelete}>
+                                DELETE
+                            </Text>
+                        </View>
+                    </TouchableOpacity>
                     <Button title="Close" onPress={props.onModalClose}/>
                 </View>
             </View>
@@ -40,6 +49,14 @@ const styles = StyleSheet.create({
     },
     modalContainer: {
         margin: 22
+    },
+    deleteButton: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        backgroundColor: 'red'
+    },
+    iconTrash: {
+
     }
 });
 
