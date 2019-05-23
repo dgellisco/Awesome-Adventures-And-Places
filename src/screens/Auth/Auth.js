@@ -9,7 +9,7 @@ class AuthScreen extends Component {
         startMainTabs();
     }
 
-    render() {
+    render () {
         return (
             <View>
                 <Text>Auth Screen</Text>
