@@ -141,14 +141,14 @@ dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "com.android.support:appcompat-v7:${rootProject.ext.supportLibVersion}"
     // ADDITION - 
-    compile project(':react-native-vector-icons')
+    implementation project(':react-native-vector-icons')
     // ADDITION (START) - react-native-navigation
     
     implementation 'com.android.support:design:27.1.0' 
     implementation "com.facebook.react:react-native:+" // From node_modules
-    compile fileTree(dir: "libs", include: ["*.jar"]) 
-    compile project(':react-native-vector-icons') 
-    compile project(':react-native-navigation')
+    implementation fileTree(dir: "libs", include: ["*.jar"]) 
+    implementation project(':react-native-vector-icons') 
+    implementation project(':react-native-navigation')
     // ADDITION (END) - react-native-navigation
 }
 
