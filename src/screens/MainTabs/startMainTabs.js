@@ -52,25 +52,3 @@ const startTabs = () => {
 };
 
 export default startTabs;
-
-// const startTabs = async () => {
-//     Navigation.startTabBasedApp({
-//         tabs: [
-//             {
-//                 // Identified from name given in App.js file
-//                 screen: "awesome-adv-places.FindPlaceScreen",
-//                 label: "Find Place",
-//                 title: "Find Place",
-//                 // ES6 async function
-//                 icon: await Icon.getImageSource("md-map", 30)
-//             },
-//             {
-//                 screen: "awesome-adv-places.SharePlaceScreen",
-//                 label: "Share Place",
-//                 title: "Share Place",
-//                 // ES6 async function
-//                 icon: await Icon.getImageSource("md-share", 30)
-//             }
-//         ]
-//     })
-// };
