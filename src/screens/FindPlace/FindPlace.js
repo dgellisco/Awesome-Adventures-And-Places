@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Animated, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { connect } from 'react-redux';
 import PlaceList from '../../components/PlaceList/PlaceList';
 
@@ -9,7 +9,9 @@ class FindPlaceScreen extends Component {
     }
 
     state = {
-        placesLoaded: false
+        placesLoaded: false,
+        removeAnim: new Animated.Value(1),
+        placesAnim: new Animated.Value(0)
     }
 
     constructor(props) {
@@ -27,11 +29,28 @@ class FindPlaceScreen extends Component {
         }
     }
 
-    placesSearchHandler = () => {
-        this.setState({
-            placesLoaded: true
-        })
+    placesLoadedHandler = () => {
+        // Configure and start Animation
+        Animated.timing(this.state.placesAnim, {
+            toValue: 1,
+            duration: 500,
+            useNativeDriver: true
+        }).start();
     }
+
+    placesSearchHandler = () => {
+        Animated.timing(this.state.removeAnim, {
+            toValue: 0,
+            duration: 500,
+            useNativeDriver: true
+            // function passed to start is executed upon completion of 'start'
+        }).start(() => {
+            this.setState({
+                placesLoaded: true
+            });
+            this.placesLoadedHandler();
+        });
+    };
 
     itemSelectedHandler = key => {
         const selPlace = this.props.places.find(place => {
@@ -48,21 +67,43 @@ class FindPlaceScreen extends Component {
 
     render () {
         let content = (
-            <TouchableOpacity onPress={this.placesSearchHandler}>
-                <View styles={styles.searchButton}>
-                    <Text styles={styles.searchButtonText}>
-                        Find Places
-                    </Text>
-                </View>
-            </TouchableOpacity>
+            // Special view, by Animated API
+            <Animated.View
+                style={{
+                    opacity: this.state.removeAnim,
+                    transform: [
+                        {
+                            // Switches fade into background to fade to foreground
+                            scale: this.state.removeAnim.interpolate({
+                                // The values inputted
+                                inputRange: [0, 1],
+                                // The values outputted/rendered
+                                outputRange: [12, 1]
+                            })
+                        }
+                    ]
+                }}
+            >
+                <TouchableOpacity onPress={this.placesSearchHandler}>
+                    <View style={styles.searchButton}>
+                        <Text style={styles.searchButtonText}>
+                            FIND PLACES
+                        </Text>
+                    </View>
+                </TouchableOpacity>
+            </Animated.View>
         );
 
         if (this.state.placesLoaded) {
             content = (
-                <PlaceList
-                    places={this.props.places}
-                    onItemSelected={this.itemSelectedHandler}
-                />
+                <Animated.View style={{
+                    opacity: this.state.placesAnim
+                }}>
+                    <PlaceList
+                        places={this.props.places}
+                        onItemSelected={this.itemSelectedHandler}
+                    />
+                </Animated.View>
             )
         }
 
