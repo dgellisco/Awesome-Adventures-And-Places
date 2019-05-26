@@ -10,6 +10,10 @@ import PickImage from '../../components/PickImage/PickImage';
 import PickLocation from '../../components/PickLocation/PickLocation';
 
 class SharePlaceScreen extends Component {
+    static navigatorStyle = {
+        navBarButtonColor: 'orange'
+    }
+
     state = {
         placeName: ""
     };
@@ -89,7 +93,7 @@ const styles = StyleSheet.create({
 
 const mapDispatchToProps = dispatch => {
     return {
-        onAddPlace: (placeName) => dispatch(addPlace(placeName))
+        onAddPlace: placeName => dispatch(addPlace(placeName))
     }
 }
 

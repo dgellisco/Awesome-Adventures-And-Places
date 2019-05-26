@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, ImageBackground, StyleSheet, View } from 'react-native';
+import { Dimensions, ImageBackground, StyleSheet, View } from 'react-native';
 
 import startMainTabs from '../MainTabs/startMainTabs';
 import DefaultInput from '../../components/UI/DefaultInput/DefaultInput';
@@ -10,25 +10,75 @@ import ButtonWithBackground from '../../components/UI/ButtonWithBackground/Butto
 import backgroundImage from '../../assets/images/auth-background.jpg';
 
 class AuthScreen extends Component {
+    state = {
+        // Initiliazes view mode
+        viewMode: Dimensions.get('window').height > 500 ? 'portrait' : 'landscape'
+    }
+
+    constructor(props) {
+        super(props);
+        // Listens for view mode changes
+        Dimensions.addEventListener('change', this.updateStyles);
+    }
+
+    componentWillUnmount() {
+        Dimensions.removeEventListener('change', this.updateStyles);
+    }
+
+    updateStyles = (dims) => {
+        this.setState({
+            viewMode: dims.window.height > 500 ? 'portrait' : 'landscape'
+        })
+    }
 
     loginHandler = () => {
         startMainTabs();
     }
 
     render () {
+        let headingText = null;
+
+        if (this.state.viewMode === 'portrait') {
+            headingText = (
+                <MainText>
+                    <HeadingText>Please Log In</HeadingText>
+                </MainText>
+            );
+        }
+
         return (
             <ImageBackground style={styles.backgroundImage} source={backgroundImage}>
                 <View style={styles.container}>
-                    <MainText>
-                        <HeadingText>Please Log In</HeadingText>
-                    </MainText>
-                    <ButtonWithBackground onPress={() => alert('ello')} color="#29aaf4">Switch To Login</ButtonWithBackground>
+                    {headingText}
+                    <ButtonWithBackground onPress={() => alert('ello')} color='#29aaf4'>
+                        Switch To Login
+                    </ButtonWithBackground>
                     <View style={styles.inputContainer}>
-                        <DefaultInput placeholder="Your E-Mail Address" style={styles.input} />
-                        <DefaultInput placeholder="Password" style={styles.input} />
-                        <DefaultInput placeholder="Confirm Password" style={styles.input} />
+                        <DefaultInput placeholder='Your E-Mail Address' style={styles.input} />
+                        <View style={
+                            this.state.viewMode === 'portrait'
+                                ? styles.portraitPasswordContainer
+                                : styles.landscapePasswordContainer
+                        }>
+                            <View style={
+                                this.state.viewMode === 'portrait'
+                                    ? styles.portraitPasswordWrapper
+                                    : styles.landscapePasswordWrapper
+                            }>
+                                <DefaultInput placeholder='Password' style={styles.input} />
+                            </View>
+                            <View style={
+                                this.state.viewMode === 'portrait'
+                                    ? styles.portraitPasswordWrapper
+                                    : styles.landscapePasswordWrapper
+                            }>
+                                <DefaultInput placeholder='Confirm Password' style={styles.input} />
+                            </View>
+                        </View>
                     </View>
-                    <ButtonWithBackground onPress={this.loginHandler} color="#29aaf4">Submit</ButtonWithBackground>
+                    <ButtonWithBackground onPress={this.loginHandler} color='#29aaf4'>
+                        Submit
+                    </ButtonWithBackground>
                 </View>
             </ImageBackground>
         );
@@ -38,8 +88,8 @@ class AuthScreen extends Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        justifyContent: "center",
-        alignItems: "center"
+        justifyContent: 'center',
+        alignItems: 'center'
     },
     backgroundImage: {
         width: '100%',
@@ -49,8 +99,23 @@ const styles = StyleSheet.create({
         width: '80%'
     },
     input: {
-        backgroundColor: "#eee",
-        borderColor: "#bbb"
+        backgroundColor: '#eee',
+        borderColor: '#bbb'
+    },
+    // Place various styles within the StyleSheet mode to take advantage of all that optimisation
+    landscapePasswordContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between'
+    },
+    portraitPasswordContainer: {
+        flexDirection: 'column',
+        justifyContent: 'flex-start'
+    },
+    landscapePasswordWrapper: {
+        width: '45%'
+    },
+    portraitPasswordWrapper: {
+        width: '100%'
     }
 })
 

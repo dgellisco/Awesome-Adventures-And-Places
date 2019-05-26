@@ -1,13 +1,14 @@
 // deliberately named in camelCase, not Proper Case like a React component
 
 import { Navigation } from 'react-native-navigation';
+import { Platform } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 const startTabs = () => {
     Promise.all([
-        Icon.getImageSource("md-map", 30),
-        Icon.getImageSource("md-share-alt", 30),
-        Icon.getImageSource("md-menu", 30)
+        Icon.getImageSource(Platform.OS === 'android' ? "md-map" : "ios-map", 30),
+        Icon.getImageSource(Platform.OS === 'android' ? "md-share-alt" : "ios-share-alt", 30),
+        Icon.getImageSource(Platform.OS === 'android' ? "md-menu" : "ios-menu", 30)
     ]).then(sources => {
         Navigation.startTabBasedApp({
             tabs: [
@@ -42,10 +43,18 @@ const startTabs = () => {
                     }
                 }
             ],
+            tabsStyle: {
+                // Update iOS tabbar button color
+                tabBarSelectedButtonColor: "orange"
+            },
             drawer: {
                 left: {
                     screen: "awesome-adv-places.SideDrawer"
                 }
+            },
+            appStyle: {
+                // Update android tabbar button color
+                tabBarSelectedButtonColor: "orange"
             }
         });
     });
