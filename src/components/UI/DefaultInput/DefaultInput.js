@@ -8,7 +8,12 @@ const defaultInput = props => (
         // If a prop from parent overrides one here in the child component, it will REPLACE, not merge with OVERWRITE.
         {...props}
         // To get around that, we can use an array.  It will over-ride by order within the array.
-        style={[styles.input, props.style]}
+        style={[
+            styles.input,
+            props.style,
+            // if props.valid is not true and touched is true, apply invalid style
+            !props.valid && props.touched ? styles.invalid : null
+        ]}
     />
 );
 
@@ -20,6 +25,10 @@ const styles = StyleSheet.create({
         padding: 5,
         marginTop: 8,
         marginBottom: 8,
+    },
+    invalid: {
+        backgroundColor: '#f9c0c0',
+        borderColor: 'red'
     }
 })
 
