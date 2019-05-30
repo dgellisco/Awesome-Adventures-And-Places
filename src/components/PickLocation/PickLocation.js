@@ -21,6 +21,13 @@ class PickLocation extends Component {
 
     pickLocationHandler = event => {
         const coords = event.nativeEvent.coordinate;
+        // Refers the map property declared using ref within the MapView JSX code.
+        this.map.animateToRegion({
+            // Override lat and long
+            ...this.state.focusedLocation,
+            latitude: coords.latitude,
+            longitude: coords.longitude
+        })
         this.setState(prevState => {
             return {
                 focusedLocation: {
@@ -29,7 +36,31 @@ class PickLocation extends Component {
                     longitude: coords.longitude
                 },
                 locationChosen: true
-            }
+            };
+        });
+        this.props.onLocationPick({
+            latitude: coords.latitude,
+            longitude: coords.longitude
+        })
+    };
+
+    getLocationHandler = () => {
+        // arguments - success function, error function, define options
+        navigator.geolocation.getCurrentPosition(pos => {
+            // Recreate object fed to pickLocationHandler, to reuse that function
+            const coordsEvent = {
+                nativeEvent: {
+                    coordinate: {
+                        latitude: pos.coords.latitude,
+                        longitude: pos.coords.longitude
+                    }
+                }
+            };
+            this.pickLocationHandler(coordsEvent);
+        },
+        error => {
+            console.log(error);
+            alert('Fetching the position failed, please pick one manually')
         })
     }
 
@@ -44,9 +75,11 @@ class PickLocation extends Component {
             <View style={styles.container}>
                 <MapView 
                     initialRegion={this.state.focusedLocation}
-                    region={this.state.focusedLocation}
                     style={styles.map}
                     onPress={this.pickLocationHandler}
+                    // ref is a default React feature
+                    // This creates a property within this class which contains a reference to this code
+                    ref={ref => this.map = ref}
                 >
                 {/* The marker is either null, or the focused location */}
                 {marker}
@@ -54,7 +87,7 @@ class PickLocation extends Component {
                 <View style={styles.button}>
                     <Button
                         title="Locate Me"
-                        onPress={() => alert("pick location")}
+                        onPress={this.getLocationHandler}
                     />
                 </View>
             </View>

@@ -2,7 +2,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Dimensions, Image, Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons'
+import Icon from 'react-native-vector-icons/Ionicons';
+import MapView from 'react-native-maps';
+
 import { deletePlace } from '../../store/actions/index';
 
 class PlaceDetail extends Component {
@@ -40,9 +42,30 @@ class PlaceDetail extends Component {
                 this.state.viewMode === 'portrait' ? styles.portraitContainer : styles.landscapeContainer
                 ]
             }>
-                <View style={styles.subContainer}>
-                    <Image source={{ uri: this.props.selectedPlace.image }} style={styles.imageStyle} />
+                <View style={styles.placeDetailContainer}>
+                    <View style={styles.subContainer}>
+                        <Image source={{ uri: this.props.selectedPlace.image }} style={styles.imageStyle} />
+                    </View>
+
+                    <View style={styles.subContainer}>
+                        <MapView
+                            initialRegion={{
+                                ...this.props.selectedPlace.location,
+                                latitudeDelta: 0.0122,
+                                // Get the aspect ratio, multiply by latDelta
+                                longitudeDelta:
+                                    Dimensions.get('window').width /
+                                    Dimensions.get('window').height *
+                                    0.0122
+                            }}
+                            style={styles.map}
+                        >
+                            <MapView.Marker coordinate={this.props.selectedPlace.location} />
+                        </MapView>
+                    </View>
+
                 </View>
+
                 <View style={styles.subContainer}>
                     <View>
                         <Text style={styles.placeNameStyle}>{this.props.selectedPlace.name}</Text>
@@ -76,9 +99,13 @@ const styles = StyleSheet.create({
     landscapeContainer: {
         flexDirection: 'row'
     },
+    map: {
+        // ensures this will fill the object around it
+        ...StyleSheet.absoluteFillObject
+    },
     imageStyle: {
         width: '100%',
-        height: 200
+        height: '100%'
     },
     placeNameStyle: {
         fontWeight: 'bold',
@@ -90,6 +117,9 @@ const styles = StyleSheet.create({
     },
     subContainer: {
         flex: 1
+    },
+    placeDetailContainer: {
+        flex: 2
     }
 });
 
