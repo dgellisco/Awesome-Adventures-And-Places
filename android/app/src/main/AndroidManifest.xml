@@ -11,12 +11,8 @@
       android:allowBackup="false"
       android:theme="@style/AppTheme">
       <!-- Google Maps API Key -->
-      <!-- <meta-data
-        android:name="com.google.android.geo.API_KEY"
-        android:value="Your Google maps API Key Here"
-      /> -->
       <meta-data
-        android:name="@string/google_maps_api_url"
+        android:name="com.google.android.geo.API_KEY"
         android:value="@string/google_maps_api_key"
       />
       <!-- Google Maps API Key -->
