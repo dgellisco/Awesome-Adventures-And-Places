@@ -3,6 +3,7 @@ package com.awesomeadventuresandplaces;
 import android.app.Application;
  
 import com.facebook.react.ReactApplication;
+import com.imagepicker.ImagePickerPackage;
 import com.airbnb.android.react.maps.MapsPackage;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
@@ -14,6 +15,8 @@ import com.reactnativenavigation.NavigationApplication;
 import com.oblador.vectoricons.VectorIconsPackage;
 // react-native-maps
 import com.airbnb.android.react.maps.MapsPackage;
+// react-native-image-picker
+import com.imagepicker.ImagePickerPackage;
  
 import java.util.Arrays;
 import java.util.List;
@@ -30,9 +33,10 @@ public class MainApplication extends NavigationApplication {
     // Add additional packages you require here
     // No need to add RnnPackage and MainReactPackage
     return Arrays.<ReactPackage>asList(
+      new MainReactPackage(),
       new VectorIconsPackage(),
       // Not needed???
-      // new MainReactPackage(),
+      new ImagePickerPackage(),
       new MapsPackage()
     );
   }

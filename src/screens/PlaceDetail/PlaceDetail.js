@@ -44,7 +44,7 @@ class PlaceDetail extends Component {
             }>
                 <View style={styles.placeDetailContainer}>
                     <View style={styles.subContainer}>
-                        <Image source={{ uri: this.props.selectedPlace.image }} style={styles.imageStyle} />
+                        <Image source={this.props.selectedPlace.image} style={styles.imageStyle} />
                     </View>
 
                     <View style={styles.subContainer}>

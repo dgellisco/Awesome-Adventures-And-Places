@@ -72,6 +72,14 @@
 		<string>Zocial.ttf</string>
 	</array>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-		<string>LetsShareAPlace</string>
+		<string>Let's share a place</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+    <string>Awesome Adventures and Places would like access to your photo gallery</string>
+    <key>NSCameraUsageDescription</key>
+    <string>Awesome Adventures and Places would like to use your camera</string>
+    <key>NSPhotoLibraryAddUsageDescription</key>
+    <string>Awesome Adventures and Places would like to save photos to your photo gallery</string>
+    <key>NSMicrophoneUsageDescription</key>
+    <string>Awesome Adventures and Places would like to your microphone (for videos)</string>
 </dict>
 </plist>
