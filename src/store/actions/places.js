@@ -1,4 +1,4 @@
-import { ADD_PLACE, DELETE_PLACE } from './actionTypes';
+import { SET_PLACES, REMOVE_PLACE } from './actionTypes';
 import { uiStartLoading, uiStopLoading } from './index';
 
 export const addPlace = (placeName, location, image) => {
@@ -15,6 +15,7 @@ export const addPlace = (placeName, location, image) => {
             })
             .catch(err => {
                 console.log(err);
+                alert("Something went wrong, please try again!");
                 dispatch(uiStopLoading());
             })
             .then(res => res.json())
@@ -38,6 +39,7 @@ export const addPlace = (placeName, location, image) => {
             // Return error
             .catch(err => {
                 console.log(err);
+                alert("Something went wrong, please try again!");
                 dispatch(uiStopLoading());
             })
             // Or return success
@@ -49,9 +51,68 @@ export const addPlace = (placeName, location, image) => {
     };
 };
 
-export const deletePlace = (key) => {
+export const getPlaces = () => {
+    // async code, so we use redux thunk
+    return dispatch => {
+        // default method is 'GET'
+        fetch("https://awesomeadventure-1559175363264.firebaseio.com/places.json")
+        .catch(err => {
+            alert("Something went wrong, please try again!");
+            console.log(err);
+        })
+        .then(res => res.json())
+        .then(parsedRes => {
+            // change object to array
+            const places = [];
+            for (let key in parsedRes) {
+                places.push({
+                    // Distribute property of each key
+                    ...parsedRes[key],
+                    image: {
+                        uri: parsedRes[key].image
+                    },
+                    // Add the key as an additional key/value pair, to store ID
+                    key: key
+                })
+            }
+            dispatch(setPlaces(places));
+        });
+    }
+};
+
+export const setPlaces = places => {
     return {
-        type: DELETE_PLACE,
-        placeKey: key
+        type: SET_PLACES,
+        places: places
+    }
+}
+
+// Deletes place in firebase
+export const deletePlace = (key) => {
+    return dispatch => {
+        // Removes the place locally.
+        dispatch(removePlace(key));
+        // Removes the place on the server.
+        fetch("https://awesomeadventure-1559175363264.firebaseio.com/places/" + key + ".json",
+        {
+            method: "DELETE"
+        })
+        .catch(err => {
+            // At this point, you SHOULD create code to re-add the code to the local store if the server delete failed (this code block)
+            alert("Something went wrong, please try again!");
+            console.log(err);
+        })
+        .then(res => res.json())
+        .then(parsedRes => {
+            console.log("Done!");
+        });
+    };
+};
+
+// Deletes place in local store
+export const removePlace = key => {
+    return {
+        type: REMOVE_PLACE,
+        key: key
     };
 };
