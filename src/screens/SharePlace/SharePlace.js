@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, KeyboardAvoidingView, ScrollView, StyleSheet, View } from 'react-native';
+import { Button, KeyboardAvoidingView, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { connect } from 'react-redux';
 
 import { addPlace } from '../../store/actions/index';
@@ -105,7 +105,25 @@ class SharePlaceScreen extends Component {
         )
     };
 
-    render () {
+    render() {
+        // Default button
+        let submitButton = (
+            <Button
+                title="Share the Place"
+                onPress={this.placeAddedHandler}
+                disabled={
+                    !this.state.controls.placeName.valid ||
+                    !this.state.controls.location.valid ||
+                    !this.state.controls.image.valid
+                }
+            />
+        );
+
+        // Alternate button
+        if (this.props.isLoading) {
+            submitButton = <Text>Loading!</Text>;
+        }
+
         return (
             <ScrollView>
                 <KeyboardAvoidingView behavior='padding' style={styles.container}>
@@ -119,15 +137,7 @@ class SharePlaceScreen extends Component {
                         onChangeText={this.placeNameChangedHandler}
                     />
                     <View style={styles.button}>
-                        <Button
-                            title="Share the Place"
-                            onPress={this.placeAddedHandler}
-                            disabled={
-                                !this.state.controls.placeName.valid ||
-                                !this.state.controls.location.valid ||
-                                !this.state.controls.image.valid
-                            }
-                        />
+                        {submitButton}
                     </View>
                 </KeyboardAvoidingView>
             </ScrollView>
@@ -156,10 +166,18 @@ const styles = StyleSheet.create({
     }
 })
 
+// Props???
+const mapStateToProps = state => {
+    return {
+        isLoading: state.ui.isLoading
+    }
+}
+
+// Actions???
 const mapDispatchToProps = dispatch => {
     return {
         onAddPlace: (placeName, location, image) => dispatch(addPlace(placeName, location, image))
     }
 }
 
-export default connect(null, mapDispatchToProps)(SharePlaceScreen);
+export default connect(mapStateToProps, mapDispatchToProps)(SharePlaceScreen);

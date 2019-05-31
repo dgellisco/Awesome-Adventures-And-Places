@@ -7,8 +7,6 @@
     "test": "jest"
   },
   "dependencies": {
-    "@google-cloud/storage": "^2.5.0",
-    "cors": "^2.8.5",
     "react": "16.8.3",
     "react-native": "0.59.8",
     "react-native-image-picker": "^0.28.1",

@@ -3,9 +3,11 @@ import thunk from 'redux-thunk';
 import { composeWithDevTools } from 'redux-devtools-extension';
 
 import placesReducer from './reducers/places';
+import uiReducer from './reducers/ui';
 
 const rootReducer = combineReducers({
-    places: placesReducer
+    places: placesReducer,
+    ui: uiReducer
 });
 
 let composeEnhancers = composeWithDevTools;
