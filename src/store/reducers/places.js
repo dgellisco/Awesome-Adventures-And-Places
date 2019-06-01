@@ -1,12 +1,12 @@
+// Import action types
 import { SET_PLACES, REMOVE_PLACE } from '../actions/actionTypes';
 
+// Set some amount of initialState
 const initialState = {
     places: []
 };
 
-// Takes the state and the action
-// state = initialState, means that if state does not exist, it will use the initialState
-// Always return a brand new state
+// Reducer - takes the previous state, processes actions, and returns a new state object
 const reducer = (state = initialState, action) => {
     switch (action.type) {
 

@@ -1,10 +1,10 @@
-// Needed to use and modify JSX
+// Import packages
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Dimensions, Image, Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import MapView from 'react-native-maps';
-
+// Import actions
 import { deletePlace } from '../../store/actions/index';
 
 class PlaceDetail extends Component {
@@ -27,9 +27,11 @@ class PlaceDetail extends Component {
         })
     };
 
+    // Delete place button function
     placeDeletedHandler = () => {
-        // setup in mapDispatchToProps
+        // Call delete action from mapDispatchToProps
         this.props.onDeletePlace(this.props.selectedPlace.key);
+        // Return to previous navigation view
         this.props.navigator.pop({
             animated: true
         });
@@ -125,7 +127,6 @@ const styles = StyleSheet.create({
 
 const mapDispatchToProps = dispatch => {
     return {
-        // dispatch action
         onDeletePlace: key => dispatch(deletePlace(key))
     };
 }

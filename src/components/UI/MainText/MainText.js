@@ -1,9 +1,8 @@
-// Styles will cascade among elements only for Text elements within other Text elements.
-
 import React from 'react';
 import { StyleSheet, Text } from 'react-native';
 
 const mainText = props => (
+    // Styles will cascade among elements only for Text elements within other Text elements.
     <Text style={styles.mainText}>{props.children}</Text>
 )
 

@@ -1,7 +1,6 @@
+// Import packages
 import React, { Component } from 'react';
 import { Button, Image, StyleSheet, View } from 'react-native';
-
-import imagePlaceholder from '../../assets/images/image_nyc.jpg';
 import ImagePicker from 'react-native-image-picker';
 
 class PickImage extends Component {
@@ -9,21 +8,26 @@ class PickImage extends Component {
         pickedImage: null
     }
 
+    // On 'pick image' button press
     pickedImageHandler = () => {
         ImagePicker.showImagePicker(
             // Arguments
             {title: 'Pick an Image'},
-            // Response, error handling
+            // Response
             res => {
+                // Error handling
                 if (res.didCancel) {
                     console.log("User cancelled!");
+                // Error handling
                 } else if (res.error) {
                     console.log("Error!", res.error);
-                }
-                else {
+                // Success handling
+                } else {
+                    // Update local state (not Redux)
                     this.setState({
                         pickedImage: { uri: res.uri }
                     })
+                    // Update Redux state
                     this.props.onImagePicked({ uri: res.uri, base64: res.data });
                 }
             }

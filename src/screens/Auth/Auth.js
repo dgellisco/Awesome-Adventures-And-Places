@@ -1,3 +1,4 @@
+// Import packages
 import React, { Component } from 'react';
 import {
     Dimensions,
@@ -9,17 +10,18 @@ import {
     View
 } from 'react-native';
 import { connect } from 'react-redux';
-
+// Import actions
 import { tryAuth } from '../../store/actions/index';
-
-import startMainTabs from '../MainTabs/startMainTabs';
+// Import components
 import DefaultInput from '../../components/UI/DefaultInput/DefaultInput';
 import HeadingText from '../../components/UI/HeadingText/HeadingText'
 import MainText from '../../components/UI/MainText/MainText'
 import ButtonWithBackground from '../../components/UI/ButtonWithBackground/ButtonWithBackground';
-
+// Import main Navigator function
+import startMainTabs from '../MainTabs/startMainTabs';
+// Import static elements
 import backgroundImage from '../../assets/images/auth-background.jpg';
-
+// Import input validation logic
 import validate from '../../utility/validation';
 
 class AuthScreen extends Component {
@@ -28,6 +30,7 @@ class AuthScreen extends Component {
         viewMode: Dimensions.get('window').height > 500 ? 'portrait' : 'landscape',
         // Default mode - login, or signup
         authMode: 'login',
+        // Sets default data object structure
         controls: {
             email: {
                 value: '',
@@ -66,6 +69,7 @@ class AuthScreen extends Component {
         Dimensions.removeEventListener('change', this.updateStyles);
     }
 
+    // Switch between login or signup
     switchAuthModeHandler = () => {
         this.setState(prevState => {
             return {
@@ -80,6 +84,7 @@ class AuthScreen extends Component {
         })
     }
 
+    // Login button pressed function - pass auth data to onLogin action, and start main Navigator tabs
     loginHandler = () => {
         const authData = {
             email: this.state.controls.email.value,
@@ -89,6 +94,7 @@ class AuthScreen extends Component {
         startMainTabs();
     }
 
+    // Update state with input entry
     updateInputState = (key, value) => {
         let connectedValue = {};
 
@@ -198,7 +204,7 @@ class AuthScreen extends Component {
                                     : styles.landscapePasswordContainer
                             }>
                                 <View style={
-                                    // If we are in signup and landscape mode, apply styles to split password fields across one horizontal line
+                                    // When in signup and landscape mode, place the two password fields on one line
                                     this.state.viewMode === 'portrait' || this.state.authMode === 'login'
                                         ? styles.portraitPasswordWrapper
                                         : styles.landscapePasswordWrapper
@@ -210,7 +216,7 @@ class AuthScreen extends Component {
                                         onChangeText={(val) => this.updateInputState('password', val)}
                                         valid={this.state.controls.password.valid}
                                         touched={this.state.controls.password.touched}
-                                        // Boolean, trated as true.  Same as secureTextEntry={true}
+                                        // Boolean, treated as true.  Same as secureTextEntry={true}
                                         secureTextEntry
                                     />
                                 </View>
@@ -252,7 +258,6 @@ const styles = StyleSheet.create({
         backgroundColor: '#eee',
         borderColor: '#bbb'
     },
-    // Place various styles within the StyleSheet mode to take advantage of all that optimisation
     landscapePasswordContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between'

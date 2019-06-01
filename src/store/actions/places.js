@@ -1,11 +1,17 @@
+// IMPORT ACTION TYPES
 import { SET_PLACES, REMOVE_PLACE } from './actionTypes';
+// IMPORT OTHER ACTIONS
 import { uiStartLoading, uiStopLoading } from './index';
 
+// EXPORT ACTIONS
+// Add place to server
+// Doesnt update store, so does not have a type and a payload.
 export const addPlace = (placeName, location, image) => {
+    // aSync function, using thunk dispatch
     return dispatch => {
         // Dispatch loading spinner
         dispatch(uiStartLoading());
-        // Store image
+        // STEP 1: Store image file
         fetch('https://us-central1-awesomeadventure-1559175363264.cloudfunctions.net/storeImage',
             {
                 method: 'POST',
@@ -13,13 +19,15 @@ export const addPlace = (placeName, location, image) => {
                     image: image.base64
                 })
             })
+            // Return error
             .catch(err => {
                 console.log(err);
                 alert("Something went wrong, please try again!");
                 dispatch(uiStopLoading());
             })
+            // Or return success
             .then(res => res.json())
-            // If image is succesfully stored, store the rest of the data
+            // STEP 2: If image is succesfully stored, store the rest of the data
             .then(parsedRes => {
                 // Compile data object together to be stored to firebase
                 const placeData = {
@@ -31,18 +39,15 @@ export const addPlace = (placeName, location, image) => {
                 // Store placeData to firebase
                 return fetch("https://awesomeadventure-1559175363264.firebaseio.com/places.json",
                 {
-                    // Require method and body of http fetch request
                     method: "POST",
                     body: JSON.stringify(placeData)
                 })
             })
-            // Return error
             .catch(err => {
                 console.log(err);
                 alert("Something went wrong, please try again!");
                 dispatch(uiStopLoading());
             })
-            // Or return success
             .then(res => res.json())
             .then(parsedRes => {
                 console.log(parsedRes);
@@ -51,8 +56,8 @@ export const addPlace = (placeName, location, image) => {
     };
 };
 
+// Retrieve places from the server
 export const getPlaces = () => {
-    // async code, so we use redux thunk
     return dispatch => {
         // default method is 'GET'
         fetch("https://awesomeadventure-1559175363264.firebaseio.com/places.json")
@@ -80,6 +85,8 @@ export const getPlaces = () => {
     }
 };
 
+// Called from aSync getPlaces
+// Updates 'places' in local state
 export const setPlaces = places => {
     return {
         type: SET_PLACES,
@@ -87,7 +94,7 @@ export const setPlaces = places => {
     }
 }
 
-// Deletes place in firebase
+// Delete place on server
 export const deletePlace = (key) => {
     return dispatch => {
         // Removes the place locally.
@@ -98,18 +105,19 @@ export const deletePlace = (key) => {
             method: "DELETE"
         })
         .catch(err => {
-            // At this point, you SHOULD create code to re-add the code to the local store if the server delete failed (this code block)
+            // To do: If the delete fails, re-add to the local store (so that store stays the same as server code)
             alert("Something went wrong, please try again!");
             console.log(err);
         })
         .then(res => res.json())
-        .then(parsedRes => {
+        .then(() => {
             console.log("Done!");
         });
     };
 };
 
-// Deletes place in local store
+// Called from aSync deletePlace
+// Deletes 'place' in local state
 export const removePlace = key => {
     return {
         type: REMOVE_PLACE,

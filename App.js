@@ -1,7 +1,3 @@
-        // ------------------- //
-        //       IMPORTS       //
-        // ------------------- //
-
 // Import: Packages
 import { Navigation } from 'react-native-navigation';
 import { Provider } from 'react-redux';
@@ -13,10 +9,6 @@ import PlaceDetailScreen from './src/screens/PlaceDetail/PlaceDetail';
 import SideDrawer from './src/screens/SideDrawer/SideDrawer';
 // Import: Redux store configuration
 import configureStore from './src/store/configureStore';
-
-        // --------------------- //
-        //       FUNCTIONS       //
-        // --------------------- //
 
 // REDUX
 // Function that returns the store (loaded with the root reducer)

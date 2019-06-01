@@ -1,3 +1,5 @@
+// INPUT VALIDATION LOGIC
+
 const validate = (val, rules, connectedValue) => {
     let isValid = true;
 

@@ -1,25 +1,26 @@
+// Import packages
 import { applyMiddleware, createStore, combineReducers } from 'redux';
 import thunk from 'redux-thunk';
 import { composeWithDevTools } from 'redux-devtools-extension';
-
+// Import reducers
 import placesReducer from './reducers/places';
 import uiReducer from './reducers/ui';
 
+// Compile all reducers into a single root reducer
 const rootReducer = combineReducers({
     places: placesReducer,
     ui: uiReducer
 });
 
+// DEVTOOLS
 let composeEnhancers = composeWithDevTools;
-
-// A global variable exposed to you by React-Native if you're in developer mode
+// A global variable exposed by React-Native when in developer mode
 if (__DEV__) {
     composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || composeWithDevTools;
 }
 
+// Function to create store with root reducer
 const configureStore = () => {
-    // createStore expects to get a single store
-    // Also pass compose enchancer and pass in middleware
     return createStore(
         rootReducer,
         composeEnhancers(applyMiddleware(thunk))

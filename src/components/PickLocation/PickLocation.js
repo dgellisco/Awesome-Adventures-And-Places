@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Button, Dimensions, StyleSheet, View } from 'react-native';
-
 import MapView from 'react-native-maps';
 
 class PickLocation extends Component {
@@ -19,15 +18,16 @@ class PickLocation extends Component {
         locationChosen: false
     }
 
+    // Updates location on map (animated) and location details in state
     pickLocationHandler = event => {
         const coords = event.nativeEvent.coordinate;
-        // Refers the map property declared using ref within the MapView JSX code.
         this.map.animateToRegion({
             // Override lat and long
             ...this.state.focusedLocation,
             latitude: coords.latitude,
             longitude: coords.longitude
         })
+        // Update local state (not Redux)
         this.setState(prevState => {
             return {
                 focusedLocation: {
@@ -38,16 +38,19 @@ class PickLocation extends Component {
                 locationChosen: true
             };
         });
+        // Update Redux state
         this.props.onLocationPick({
             latitude: coords.latitude,
             longitude: coords.longitude
         })
     };
 
+    // Function for 'find my location'
     getLocationHandler = () => {
-        // arguments - success function, error function, define options
+        // Find current location
         navigator.geolocation.getCurrentPosition(pos => {
-            // Recreate object fed to pickLocationHandler, to reuse that function
+            // Update current location details
+            // Recreate object data structure fed to pickLocationHandler, so that we can reuse that function
             const coordsEvent = {
                 nativeEvent: {
                     coordinate: {
@@ -62,7 +65,7 @@ class PickLocation extends Component {
             console.log(error);
             alert('Fetching the position failed, please pick one manually')
         })
-    }
+    };
 
     render() {
         let marker = null;
@@ -78,7 +81,8 @@ class PickLocation extends Component {
                     style={styles.map}
                     onPress={this.pickLocationHandler}
                     // ref is a default React feature
-                    // This creates a property within this class which contains a reference to this code
+                    // This is required to identify this map to perform it's functions
+                    // It creates a property within this class which contains a reference (this.map) to this element
                     ref={ref => this.map = ref}
                 >
                 {/* The marker is either null, or the focused location */}

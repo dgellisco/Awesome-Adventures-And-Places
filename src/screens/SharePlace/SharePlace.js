@@ -1,15 +1,19 @@
+// Import packages
 import React, { Component } from 'react';
 import { ActivityIndicator, Button, KeyboardAvoidingView, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { connect } from 'react-redux';
 
+// Import required actions
 import { addPlace } from '../../store/actions/index';
 
+// Import components
 import MainText from '../../components/UI/MainText/MainText';
 import HeadingText from '../../components/UI/HeadingText/HeadingText';
 import PlaceInput from '../../components/PlaceInput/PlaceInput';
 import PickImage from '../../components/PickImage/PickImage';
 import PickLocation from '../../components/PickLocation/PickLocation';
 
+// Import input validator utility
 import validate from '../../utility/validation'
 
 class SharePlaceScreen extends Component {
@@ -17,6 +21,7 @@ class SharePlaceScreen extends Component {
         navBarButtonColor: 'orange'
     }
 
+    // Set initial location state as empty
     state = {
         controls: {
             placeName: {
@@ -43,6 +48,7 @@ class SharePlaceScreen extends Component {
         this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent);
     }
 
+    // Toggle sidebar
     onNavigatorEvent = event => {
         if (event.type === "NavBarButtonPress") {
             if (event.id === "sideDrawerToggle") {
@@ -53,6 +59,7 @@ class SharePlaceScreen extends Component {
         }
     };
 
+    // Update state with place name from input
     placeNameChangedHandler = val => {
         this.setState(prevState => {
             return {
@@ -69,6 +76,7 @@ class SharePlaceScreen extends Component {
         });
     };
 
+    // Update state with location from map
     locationPickedHandler = location => {
         this.setState(prevState => {
             return {
@@ -83,6 +91,7 @@ class SharePlaceScreen extends Component {
         });
     };
 
+    // Update state with image from picker
     imagePickedHandler = image => {
         this.setState(prevState => {
             return {
@@ -97,6 +106,7 @@ class SharePlaceScreen extends Component {
         })
     }
 
+    // On button press, add location to server/store
     placeAddedHandler = () => {
         this.props.onAddPlace(
             this.state.controls.placeName.value,
@@ -106,7 +116,7 @@ class SharePlaceScreen extends Component {
     };
 
     render() {
-        // Default button
+        // Submit button
         let submitButton = (
             <Button
                 title="Share the Place"
@@ -119,7 +129,7 @@ class SharePlaceScreen extends Component {
             />
         );
 
-        // Alternate button
+        // Submit button overridden by loading icon
         if (this.props.isLoading) {
             submitButton = <ActivityIndicator />;
         }
@@ -166,18 +176,19 @@ const styles = StyleSheet.create({
     }
 })
 
-// Props???
+// Selected state from the store
 const mapStateToProps = state => {
     return {
         isLoading: state.ui.isLoading
     }
 }
 
-// Actions???
+// Selected actions from the store
 const mapDispatchToProps = dispatch => {
     return {
         onAddPlace: (placeName, location, image) => dispatch(addPlace(placeName, location, image))
     }
 }
 
+// Connect Redux to this component
 export default connect(mapStateToProps, mapDispatchToProps)(SharePlaceScreen);

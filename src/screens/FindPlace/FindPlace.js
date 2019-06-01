@@ -1,9 +1,10 @@
+// Import packages
 import React, { Component } from 'react';
 import { Animated, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { connect } from 'react-redux';
-
+// Import required component
 import PlaceList from '../../components/PlaceList/PlaceList';
-
+// Import requried actions
 import { getPlaces } from '../../store/actions/index'
 
 class FindPlaceScreen extends Component {
@@ -24,9 +25,12 @@ class FindPlaceScreen extends Component {
 
     // Lifecyle handler
     componentDidMount() {
+        // Calls getPlaces action from mapDispatchToProps
+        // Load all places from server
         this.props.onLoadPlaces();
     }
 
+    // Sidebar toggle
     onNavigatorEvent = event => {
         if (event.type === "NavBarButtonPress") {
             if (event.id === "sideDrawerToggle") {
@@ -37,8 +41,9 @@ class FindPlaceScreen extends Component {
         }
     }
 
+    // Places loaded animation
     placesLoadedHandler = () => {
-        // Configure and start Animation
+        // Fades places in
         Animated.timing(this.state.placesAnim, {
             toValue: 1,
             duration: 500,
@@ -46,13 +51,14 @@ class FindPlaceScreen extends Component {
         }).start();
     }
 
+    // Load places animation
     placesSearchHandler = () => {
         Animated.timing(this.state.removeAnim, {
             toValue: 0,
             duration: 500,
             useNativeDriver: true
-            // function passed to start is executed upon completion of 'start'
         }).start(() => {
+            // This code block (passed to start function) is executed upon completion of 'start'
             this.setState({
                 placesLoaded: true
             });
@@ -60,6 +66,7 @@ class FindPlaceScreen extends Component {
         });
     };
 
+    // On click of place, push a navigator screen on top, displays place detail
     itemSelectedHandler = key => {
         const selPlace = this.props.places.find(place => {
             return place.key === key;
@@ -102,6 +109,7 @@ class FindPlaceScreen extends Component {
             </Animated.View>
         );
 
+        // Renders the PlaceList component, which itself contains display of each individual place
         if (this.state.placesLoaded) {
             content = (
                 <Animated.View style={{
@@ -148,7 +156,6 @@ const mapStateToProps = state => {
     };
 };
 
-// Actions we can dispatch
 const mapDispatchToProps = dispatch => {
     return {
         onLoadPlaces: () => dispatch(getPlaces())
