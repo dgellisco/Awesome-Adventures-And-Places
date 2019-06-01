@@ -1,8 +1,10 @@
+// FIREBASE FUNCTIONS FILE
 // Node.js file
+
+// Imports
 const functions = require('firebase-functions');
 const cors = require('cors')({origin: true});
 const fs = require('fs');
-// Import package to 
 const UUID = require('uuid-v4');
 
 // Firebase settings
@@ -14,22 +16,26 @@ const gsc = require('@google-cloud/storage')(gcconfig);
 
 // // Create and Deploy Your First Cloud Functions
 // // https://firebase.google.com/docs/functions/write-firebase-functions
-//
+// 
 exports.storeImage = functions.https.onRequest((request, response) => {
     // All code goes in here.
     cors(request, response, () => {
         const body = JSON.parse(request.body);
-        fs.writeFileSync('/tmp/uploaded-image.jpg', body.image, 'base64', err => {
-            console.log(err);
-            return response.status(500).json({error: err});
-        });
-        // This code only runs if the return above doesn't run, so if there is no error
-        // Targets a pre-existing storage bucket
+        fs.writeFileSync('/tmp/uploaded-image.jpg', body.image, 'base64',
+            // If an error occurs, exit this code block with the return statement
+            err => {
+                console.log(err);
+                return response.status(500).json({error: err});
+            }
+        );
+        // Target a pre-existing storage bucket
         const bucket = gsc.bucket('awesomeadventure-1559175363264.appspot.com')
         const uuid = UUID();
-        
-        // Upload the file to our firebase storage bucket
-        return bucket.upload('/tmp/uploaded-image.jpg',
+        // Upload the file to the firebase storage bucket
+        return bucket.upload(
+            // Arg 1, File to upload
+            '/tmp/uploaded-image.jpg',
+            // Arg 2, Set details for upload
             {
                 uploadType: 'media',
                 destination: '/places/' + uuid + '.jpg',
@@ -40,7 +46,7 @@ exports.storeImage = functions.https.onRequest((request, response) => {
                     }
                 }
             },
-            // Third argument.  Error is either null or the error.  The file is either the file or null (if there is an error).
+            // Arg 3, error.  Either null null, or the error and the file.
             (err, file) => {
                 // If there is no error...
                 if (!err) {
