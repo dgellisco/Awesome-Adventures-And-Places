@@ -1,6 +1,7 @@
 # API Keys
 **/*/res/values/secrets.xml
 functions/gcs-awesomeadventures.json
+firebase.config.js
 
 # OSX
 #
