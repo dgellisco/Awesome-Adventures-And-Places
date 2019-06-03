@@ -25,8 +25,6 @@ export const tryAuth = (authData, authMode) => {
             url = 'https://www.googleapis.com/identitytoolkit/v3/relyingparty/signupNewUser?key=' 
         }
 
-        console.log(url + firebaseConfig.apiKey);
-
         // Send fetch POST request
         fetch(url + firebaseConfig.apiKey,
             {
@@ -70,11 +68,11 @@ export const tryAuth = (authData, authMode) => {
 
 export const authStoreToken = (token, expiresIn, refreshToken) => {
     return dispatch => {
-        // Store token locally in state
-        dispatch(authSetToken(token));
         // Get expiry date of token.
         const now = new Date();
         const expiryDate = now.getTime() + ( expiresIn * 1000 );
+        // Store token locally in state
+        dispatch(authSetToken(token, expiryDate));
         // Store token locally in react-native, for persistent login
         AsyncStorage.setItem("ap:auth:token", token);
         AsyncStorage.setItem("ap:auth:expiryDate", expiryDate.toString());
@@ -82,10 +80,11 @@ export const authStoreToken = (token, expiresIn, refreshToken) => {
     }
 };
 
-export const authSetToken = token => {
+export const authSetToken = (token, expiryDate) => {
     return {
         type: AUTH_SET_TOKEN,
-        token: token
+        token: token,
+        expiryDate: expiryDate
     };
 };
 
@@ -94,7 +93,8 @@ export const authGetToken = () => {
         // Create the promise to get the token
         const promise = new Promise((resolve, reject) => {
             const token = getState().auth.token;
-            if (!token) {
+            const expiryDate = getState().auth.expiryDate;
+            if (!token || new Date(expiryDate) <= new Date()) {
                 let fetchedToken;
                 // If there's no token in redux, see if token is in aSync storage
                 AsyncStorage.getItem("ap:auth:token")
@@ -122,6 +122,7 @@ export const authGetToken = () => {
                             reject();
                         }
                     })
+                    .catch(err => reject());
             } else {
                 resolve(token);
             }
@@ -140,7 +141,7 @@ export const authGetToken = () => {
                         body: "grant_type=refresh_token&refresh_token=" + refreshToken
                     })
                 })
-                .then(res => console.log(res))
+                .then(res => res.json())
                 .then(parsedRes => {
                     if (parsedRes.id_token) {
                         console.log("Refresh token worked!");
