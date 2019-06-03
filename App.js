@@ -22,9 +22,9 @@ Navigation.registerComponent(
     "awesome-adv-places.AuthScreen",
     // Function to load screen
     () => AuthScreen,
-    // Load the store
+    // Load the store, to give access to redux
     store,
-    // Load the provider
+    // Load the provider, to give access to redux
     Provider
 );
 
@@ -51,11 +51,13 @@ Navigation.registerComponent(
 
 Navigation.registerComponent(
     "awesome-adv-places.SideDrawer",
-    () => SideDrawer
+    () => SideDrawer,
+    store,
+    Provider
 );
 
 // Start an App
-Navigation.startSingleScreenApp({
+export default () => Navigation.startSingleScreenApp({
     screen: {
         screen: "awesome-adv-places.AuthScreen",
         title: "Login"

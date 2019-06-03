@@ -2,6 +2,8 @@
 import React, { Component } from 'react';
 import { Dimensions, Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
+import { connect } from 'react-redux';
+import { authLogout } from '../../store/actions/index';
 
 class SideDrawer extends Component {
     render() {
@@ -12,7 +14,7 @@ class SideDrawer extends Component {
                     { width: Dimensions.get("window").width * 0.8 }
                 ]}
             >
-                <TouchableOpacity>
+                <TouchableOpacity onPress={this.props.onLogout}>
                     <View style={styles.drawerItem}>
                         <Icon
                             name={Platform.OS === 'android' ? 'md-log-out' : 'ios-log-out'}
@@ -44,4 +46,10 @@ const styles = StyleSheet.create({
     }
 })
 
-export default SideDrawer;
+const mapDispatchToProps = dispatch => {
+    return {
+        onLogout: () => dispatch(authLogout())
+    }
+}
+
+export default connect(null, mapDispatchToProps)(SideDrawer);

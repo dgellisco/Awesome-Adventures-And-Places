@@ -1,9 +1,11 @@
+// Import main App file
+import App from "../../../App";
 // IMPORT REACT-NATIVE
 import { AsyncStorage } from 'react-native';
 // IMPORT API KEY
 import firebaseConfig from '../../../firebase.config'
 // IMPORT ACTION TYPES
-import { AUTH_SET_TOKEN } from './actionTypes';
+import { AUTH_REMOVE_TOKEN, AUTH_SET_TOKEN } from './actionTypes';
 // IMPORT COMPONENTS
 import { uiStartLoading, uiStopLoading } from './index'
 // Import main Navigator function
@@ -181,5 +183,23 @@ export const authClearStorage = () => {
     return dispatch => {
         AsyncStorage.removeItem("ap:auth:token");
         AsyncStorage.removeItem("ap:auth:expiryDate");
+        return AsyncStorage.removeItem("ap:auth:refreshToken");
+    }
+}
+
+export const authLogout = () => {
+    return dispatch => {
+        dispatch(authClearStorage())
+            // Susbcribe to async promise of authClearStorage
+            .then(() => {
+                App();
+            })
+        dispatch(authRemoveToken());
+    }
+}
+
+export const authRemoveToken = () => {
+    return {
+        type: AUTH_REMOVE_TOKEN
     }
 }
