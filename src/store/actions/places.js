@@ -9,6 +9,7 @@ import { authGetToken, uiStartLoading, uiStopLoading } from './index';
 export const addPlace = (placeName, location, image) => {
     // aSync function, using thunk dispatch
     return dispatch => {
+        let authToken;
         // Dispatch loading spinner
         dispatch(uiStartLoading());
         dispatch(authGetToken())
@@ -16,13 +17,17 @@ export const addPlace = (placeName, location, image) => {
                 alert("No valid token found!");
             })
             .then(token => {
+                authToken = token;
                 // STEP 1: Store image file
                 return fetch('https://us-central1-awesomeadventure-1559175363264.cloudfunctions.net/storeImage',
                 {
                     method: 'POST',
                     body: JSON.stringify({
                         image: image.base64
-                    })
+                    }),
+                    headers: {
+                        "Authorization": "Bearer " + authToken
+                    }
                 })
             })
             // Return error
@@ -43,7 +48,7 @@ export const addPlace = (placeName, location, image) => {
                     image: parsedRes.imageUrl
                 };
                 // Store placeData to firebase
-                return fetch("https://awesomeadventure-1559175363264.firebaseio.com/places.json",
+                return fetch("https://awesomeadventure-1559175363264.firebaseio.com/places.json?auth=" + authToken,
                 {
                     method: "POST",
                     body: JSON.stringify(placeData)

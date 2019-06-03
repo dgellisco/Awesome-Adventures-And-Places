@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 import { connect } from 'react-redux';
 // Import actions
-import { tryAuth } from '../../store/actions/index';
+import { authAutoSignIn, tryAuth } from '../../store/actions/index';
 // Import components
 import DefaultInput from '../../components/UI/DefaultInput/DefaultInput';
 import HeadingText from '../../components/UI/HeadingText/HeadingText'
@@ -66,6 +66,10 @@ class AuthScreen extends Component {
 
     componentWillUnmount() {
         Dimensions.removeEventListener('change', this.updateStyles);
+    }
+
+    componentDidMount() {
+        this.props.onAutoSignIn();
     }
 
     // Switch between login or signup
@@ -288,7 +292,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        onTryAuth: (authData, authMode) => dispatch(tryAuth(authData, authMode))
+        onTryAuth: (authData, authMode) => dispatch(tryAuth(authData, authMode)),
+        onAutoSignIn: () => dispatch(authAutoSignIn())
     };
 };
 

@@ -17,7 +17,7 @@ const gsc = require('@google-cloud/storage')(gcconfig);
 
 // Intialize firebase admin
 firebaseAdmin.initializeApp({
-    credential: firebaseAdmin.credential.cert(require("./places.json"));
+    credential: firebaseAdmin.credential.cert(require("./gcs-awesomeadventures.json"))
 })
 
 // // Create and Deploy Your First Cloud Functions
