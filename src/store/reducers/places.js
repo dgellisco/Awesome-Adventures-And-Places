@@ -1,9 +1,10 @@
 // Import action types
-import { SET_PLACES, REMOVE_PLACE } from '../actions/actionTypes';
+import { PLACE_ADDED, REMOVE_PLACE, SET_PLACES, START_ADD_PLACE } from '../actions/actionTypes';
 
 // Set some amount of initialState
 const initialState = {
-    places: []
+    places: [],
+    placeAdded: false
 };
 
 // Reducer - takes the previous state, processes actions, and returns a new state object
@@ -24,6 +25,18 @@ const reducer = (state = initialState, action) => {
                 })
             };
         
+        case START_ADD_PLACE:
+            return {
+                ...state,
+                placeAdded: false
+            };
+
+        case PLACE_ADDED:
+            return {
+                ...state,
+                placeAdded: true
+            };
+
         default:
             return state;
     }

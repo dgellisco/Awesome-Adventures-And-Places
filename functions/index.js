@@ -78,7 +78,8 @@ exports.storeImage = functions.https.onRequest((request, response) => {
                                     encodeURIComponent(file.name) +
                                     // Query parameter
                                     "?alt=media&token=" +
-                                    uuid
+                                    uuid,
+                                imagePath: "/places/" + uuid + ".jpg"
                             });
                         // If there is an error...
                         } else {
@@ -93,4 +94,17 @@ exports.storeImage = functions.https.onRequest((request, response) => {
                 response.status(403).json({error: "Unauthorized"})
             })
     });
+});
+
+// Listen in /places/
+exports.deleteImage = functions.database
+    .ref("/places/{placeId}")
+    .onDelete(event => {
+    // Access previous data
+    const placeData = snapshot.val();
+    const imagePath = placeData.imagePath;
+
+    const bucket = gcs.bucket('awesomeadventure-1559175363264.appspot.com');
+    // Return the promise
+    return bucket.file(imagePath).delete();
 });

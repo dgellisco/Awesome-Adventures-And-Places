@@ -23,15 +23,15 @@ class FindPlaceScreen extends Component {
         this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent);
     }
 
-    // Lifecyle handler
-    componentDidMount() {
-        // Calls getPlaces action from mapDispatchToProps
-        // Load all places from server
-        this.props.onLoadPlaces();
-    }
-
     // Sidebar toggle
     onNavigatorEvent = event => {
+        if (event.type === "ScreenChangedEvent") {
+            if (event.id === "willAppear") {
+                // Calls getPlaces action from mapDispatchToProps
+                // Load all places from server
+                this.props.onLoadPlaces();
+            }
+        }
         if (event.type === "NavBarButtonPress") {
             if (event.id === "sideDrawerToggle") {
                 this.props.navigator.toggleDrawer({

@@ -1,9 +1,15 @@
 // IMPORT ACTION TYPES
-import { SET_PLACES, REMOVE_PLACE } from './actionTypes';
+import { PLACE_ADDED, REMOVE_PLACE, SET_PLACES, START_ADD_PLACE } from './actionTypes';
 // IMPORT OTHER ACTIONS
 import { authGetToken, uiStartLoading, uiStopLoading } from './index';
 
 // EXPORT ACTIONS
+export const startAddPlace = () => {
+    return {
+        type: START_ADD_PLACE
+    }
+}
+
 // Add place to server
 // Doesnt update store, so does not have a type and a payload.
 export const addPlace = (placeName, location, image) => {
@@ -37,7 +43,14 @@ export const addPlace = (placeName, location, image) => {
                 dispatch(uiStopLoading());
             })
             // Or return success
-            .then(res => res.json())
+            .then(res => {
+                // Helper property that shows us if the response was ok
+                if (res.ok) {
+                    return res.json();
+                } else {
+                    throw new Error();
+                }
+            })
             // STEP 2: If image is succesfully stored, store the rest of the data
             .then(parsedRes => {
                 // Compile data object together to be stored to firebase
@@ -45,7 +58,9 @@ export const addPlace = (placeName, location, image) => {
                     name: placeName,
                     location: location,
                     // Image URL generated from the backend
-                    image: parsedRes.imageUrl
+                    image: parsedRes.imageUrl,
+                    // Image path
+                    imagePath: parsedRes.imagePath
                 };
                 // Store placeData to firebase
                 return fetch("https://awesomeadventure-1559175363264.firebaseio.com/places.json?auth=" + authToken,
@@ -54,10 +69,18 @@ export const addPlace = (placeName, location, image) => {
                     body: JSON.stringify(placeData)
                 })
             })
-            .then(res => res.json())
+            .then(res => {
+                // Helper property that shows us if the response was ok
+                if (res.ok) {
+                    return res.json();
+                } else {
+                    throw new Error();
+                }
+            })
             .then(parsedRes => {
                 console.log(parsedRes);
                 dispatch(uiStopLoading());
+                dispatch(placeAdded());
             })
             .catch(err => {
                 console.log(err);
@@ -66,6 +89,12 @@ export const addPlace = (placeName, location, image) => {
             });
     };
 };
+
+export const placeAdded = () => {
+    return {
+        type: PLACE_ADDED
+    }
+}
 
 // Retrieve places from the server
 export const getPlaces = () => {
@@ -82,7 +111,14 @@ export const getPlaces = () => {
             .catch(() => {
                 alert("No valid token found!");
             })
-            .then(res => res.json())
+            .then(res => {
+                // Helper property that shows us if the response was ok
+                if (res.ok) {
+                    return res.json();
+                } else {
+                    throw new Error();
+                }
+            })
             .then(parsedRes => {
                 // change object to array
                 const places = [];
@@ -131,8 +167,15 @@ export const deletePlace = (key) => {
                     method: "DELETE"
                 })
             })
-            .then(res => res.json())
-            .then(() => {
+            .then(res => {
+                // Helper property that shows us if the response was ok
+                if (res.ok) {
+                    return res.json();
+                } else {
+                    throw new Error();
+                }
+            })
+            .then(parsedRes => {
                 console.log("Done!");
             })
             .catch(err => {
