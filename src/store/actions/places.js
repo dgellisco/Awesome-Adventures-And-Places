@@ -161,13 +161,16 @@ export const deletePlace = (key) => {
             .then(token => {      
                 // Removes the place locally.
                 dispatch(removePlace(key));
-                // Removes the place on the server.
+                console.log("deletePlace 2nd block")
+                // Removes the place data (but not image, this is done through the firebase functions index file) on the server.
                 return fetch("https://awesomeadventure-1559175363264.firebaseio.com/places/" + key + ".json?auth=" + token,
                 {
                     method: "DELETE"
                 })
             })
             .then(res => {
+                console.log("deletePlace 3rd block")
+                console.log(res);
                 // Helper property that shows us if the response was ok
                 if (res.ok) {
                     return res.json();
@@ -176,7 +179,8 @@ export const deletePlace = (key) => {
                 }
             })
             .then(parsedRes => {
-                console.log("Done!");
+                console.log("Delete done!");
+                console.log(parsedRes);
             })
             .catch(err => {
                 // To do: If the delete fails, re-add to the local store (so that store stays the same as server code)

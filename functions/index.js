@@ -8,12 +8,13 @@ const cors = require('cors')({origin: true});
 const fs = require('fs');
 const UUID = require('uuid-v4');
 
-// Firebase settings
+// Google Cloud settings
 const gcconfig = {
     projectId: 'awesomeadventure-1559175363264',
     keyFilename: 'gcs-awesomeadventures.json'
 }
-const gsc = require('@google-cloud/storage')(gcconfig);
+// Setup Google Cloud storage, pass it the config
+const gcs = require('@google-cloud/storage')(gcconfig);
 
 // Intialize firebase admin
 firebaseAdmin.initializeApp({
@@ -47,7 +48,7 @@ exports.storeImage = functions.https.onRequest((request, response) => {
                     }
                 );
                 // Target a pre-existing storage bucket
-                const bucket = gsc.bucket('awesomeadventure-1559175363264.appspot.com')
+                const bucket = gcs.bucket('awesomeadventure-1559175363264.appspot.com')
                 const uuid = UUID();
                 // Upload the file to the firebase storage bucket
                 return bucket.upload(
@@ -97,14 +98,20 @@ exports.storeImage = functions.https.onRequest((request, response) => {
 });
 
 // Listen in /places/
-exports.deleteImage = functions.database
-    .ref("/places/{placeId}")
-    .onDelete(event => {
-    // Access previous data
-    const placeData = snapshot.val();
-    const imagePath = placeData.imagePath;
+exports.deleteImage = functions.database.ref("/places/{placeId}")
+    .onDelete(snapshot => {
+        console.log("snapshot.val()");
+        console.log(snapshot.val());
+        // Access previous data
+        const placeData = snapshot.val();
+        console.log("placeData");
+        console.log(placeData);
+        
+        const imagePath = placeData.imagePath;
+        console.log("imagePath");
+        console.log(imagePath);
 
-    const bucket = gcs.bucket('awesomeadventure-1559175363264.appspot.com');
-    // Return the promise
-    return bucket.file(imagePath).delete();
+        const bucket = gcs.bucket("awesomeadventure-1559175363264.appspot.com");
+        // Return the promise
+        return bucket.file(imagePath).delete();
 });

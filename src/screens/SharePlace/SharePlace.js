@@ -32,7 +32,7 @@ class SharePlaceScreen extends Component {
 
     componentDidUpdate() {
         if (this.props.placeAdded) {
-            this.props.navigator.switchToTab({tabIndex: 0});
+            this.props.navigator.switchToTab({ tabIndex: 0 });
             // this.props.onStartAddPlace();
         }
     }
@@ -57,8 +57,8 @@ class SharePlaceScreen extends Component {
                     valid: false
                 }
             }
-        })
-    }
+        });
+    };
 
     // Toggle sidebar
     onNavigatorEvent = event => {

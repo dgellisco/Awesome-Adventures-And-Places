@@ -15,7 +15,7 @@ class PickImage extends Component {
     }
 
     // On 'pick image' button press
-    pickedImageHandler = () => {
+    pickImageHandler = () => {
         ImagePicker.showImagePicker(
             // Arguments
             {
@@ -51,7 +51,7 @@ class PickImage extends Component {
                     <Image source={this.state.pickedImage} style={styles.imagePreview}/>
                 </View>
                 <View style={styles.button}>
-                    <Button title="Pick Image" onPress={this.pickedImageHandler}/>
+                    <Button title="Pick Image" onPress={this.pickImageHandler}/>
                 </View>
             </View>
         );

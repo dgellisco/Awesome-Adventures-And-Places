@@ -32,9 +32,10 @@ class PlaceDetail extends Component {
         // Call delete action from mapDispatchToProps
         this.props.onDeletePlace(this.props.selectedPlace.key);
         // Return to previous navigation view
-        this.props.navigator.pop({
-            animated: true
-        });
+        // this.props.navigator.pop({
+        //     animated: true
+        // });
+        this.props.navigator.pop();
     }
     
     render() {
