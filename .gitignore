@@ -3,6 +3,10 @@
 functions/gcs-awesomeadventures.json
 firebase.config.js
 
+# GooglePlay KeyStore file
+awesome-adventures-and-places.keystore
+gradle.properties
+
 # OSX
 #
 .DS_Store

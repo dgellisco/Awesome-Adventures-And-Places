@@ -108,6 +108,18 @@ android {
         versionCode 1
         versionName "1.0"
     }
+    // GOOGLE PLAY SETTINGS
+    signingConfigs {
+        release {
+            if (project.hasProperty('MYAPP_UPLOAD_STORE_FILE')) {
+                storeFile file(MYAPP_UPLOAD_STORE_FILE)
+                storePassword MYAPP_UPLOAD_STORE_PASSWORD
+                keyAlias MYAPP_UPLOAD_KEY_ALIAS
+                keyPassword MYAPP_UPLOAD_KEY_PASSWORD
+            }
+        }
+    }
+    // GOOGLE PLAY SETTINGS
     splits {
         abi {
             reset()
@@ -120,6 +132,9 @@ android {
         release {
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+            // GOOGLE PLAY SETTINGS (START)
+            signingConfig signingConfigs.release
+            // GOOGLE PLAY SETTINGS (END)
         }
     }
     // applicationVariants are e.g. debug, release
